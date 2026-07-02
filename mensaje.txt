@@ -1,1 +1,1 @@
-Hola Mundo, este es mi proyecto automatizado.
+Hola Planeta, este es mi proyecto automatizado.

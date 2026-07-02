@@ -1,0 +1,22 @@
+name: Inspector de Calidad de Texto
+
+on: [push]
+
+jobs:
+  control-calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Paso 1 - Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Paso 2 - Leer el archivo mensaje.txt
+        run: cat mensaje.txt
+
+      - name: Paso 3 - Buscar la palabra 'Mundo'
+        run: |
+          if grep -q "Mundo" mensaje.txt; then
+            echo "¡Felicidades! El texto cumple con el estándar de calidad."
+          else
+            echo "Error: La palabra obligatoria 'Mundo' no fue encontrada."
+            exit 1
+          fi

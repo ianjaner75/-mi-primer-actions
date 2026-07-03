@@ -1,0 +1,33 @@
+name: Prueba Manual Interactiva
+
+on:
+  workflow_dispatch:
+    inputs:
+      entorno:
+        description: 'Elige el entorno de trabajo'
+        required: true
+        default: 'Desarrollo'
+        type: choice
+        options:
+          - Desarrollo
+          - Produccion
+      mensaje_personalizado:
+        description: 'Escribe un saludo corto'
+        required: false
+        default: '¡Hola desde GitHub Actions!'
+
+jobs:
+  pruebas-manuales:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Paso 1 - Saludo Inicial
+        run: |
+          echo "Iniciando flujo manual..."
+          echo "El saludo ingresado es: ${{ github.event.inputs.mensaje_personalizado }}"
+          echo "El entorno seleccionado es: ${{ github.event.inputs.entorno }}"
+
+      - name: Paso 2 - Alerta Especial (Solo para Produccion)
+        if: github.event.inputs.entorno == 'Produccion'
+        run: |
+          echo "⚠️ ATENCIÓN: Estás ejecutando esta tarea en el entorno de PRODUCCIÓN."
+          echo "Toma precauciones adicionales porque esto afecta a los usuarios reales."

@@ -1,0 +1,38 @@
+name: Practica de Artefactos y Depuracion
+
+on: [push] # Se activa con cualquier push
+
+jobs: # 0 espacios
+  crear-archivo: # 2 espacios (ID del primer trabajo)
+    runs-on: ubuntu-latest # 4 espacios (sistema operativo)
+    steps: # 4 espacios (inicio de los pasos)
+      - name: 1. Descargar el repositorio # 6 espacios (inicia con un guión "-")
+        uses: actions/checkout@v4 # 8 espacios
+
+      - name: 2. Mostrar el evento disparador
+        run: echo "Este flujo fue iniciado por un evento tipo ${{ github.event_name }}"
+
+      - name: 3. Crear un reporte de texto en la VM
+        run: |
+          echo "REPORTE DE AUTOMATIZACION" > reporte.txt
+          echo "Evento disparador: ${{ github.event_name }}" >> reporte.txt
+          echo "ID de ejecucion: ${{ github.run_id }}" >> reporte.txt
+
+      - name: 4. Guardar el archivo en el Casillero (Upload)
+        uses: actions/upload-artifact@v4 # Acción para subir archivos
+        with: # Parámetros para la acción de subida
+          name: mi-reporte-secreto # El nombre del paquete en el casillero
+          path: reporte.txt # El archivo físico que queremos guardar
+
+  leer-archivo: # 2 espacios (ID del segundo trabajo)
+    runs-on: ubuntu-latest # 4 espacios
+    needs: crear-archivo # [Visto en clase] Espera a que el trabajo de arriba termine con éxito
+    steps: # 4 espacios
+      - name: 1. Abrir el Casillero y descargar el archivo (Download)
+        uses: actions/download-artifact@v4 # Acción para descargar archivos
+        with: # Parámetros para la descarga
+          name: mi-reporte-secreto # Debe llamarse EXACTAMENTE igual que al subirlo
+          path: carpeta-descargada # Carpeta donde se guardará el archivo descargado
+
+      - name: 2. Leer el contenido del archivo descargado
+        run: cat carpeta-descargada/reporte.txt # Comando "cat" para leer el archivo en la consola

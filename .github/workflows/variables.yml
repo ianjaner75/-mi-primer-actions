@@ -1,0 +1,24 @@
+name: Practica de Variables y Ambito
+
+on:
+  workflow_dispatch # [OBLIGATORIO] Habilita el botón manual en la web
+
+env:
+  MENSAJE_GLOBAL: "Cacharreando con Actions" # [OPCIONAL - Inventada]
+
+jobs:
+  pruebas-variables: # [OBLIGATORIO - ID inventado]
+    runs-on: ubuntu-latest # [OBLIGATORIO] Usará una máquina Linux
+    steps: # [OBLIGATORIO] Lista de pasos
+      - name: 1. Demostrar condicional de OS
+        if: runner.os == 'Linux' # [Mundo GitHub] Si el sistema es Linux, ejecuta el paso
+        run: echo "Estamos ejecutando esto en una computadora con $RUNNER_OS" # [Mundo Consola] Lee la variable por defecto
+
+      - name: 2. Crear una variable dinamica (Paso A)
+        run: |
+          echo "MI_ESTADO=activo" >> "$GITHUB_ENV" # [Mundo Consola] Guarda la variable inventada en el archivo temporal
+
+      - name: 3. Leer la variable dinamica (Paso B)
+        run: |
+          echo "El mensaje global es: $MENSAJE_GLOBAL" # Lee la variable de la línea 6
+          echo "La variable dinamica creada en el paso anterior es: $MI_ESTADO" # Lee la variable creada en la línea 15

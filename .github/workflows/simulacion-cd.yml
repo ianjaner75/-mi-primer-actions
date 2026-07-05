@@ -1,0 +1,25 @@
+name: Simulacion de Entrega Continua (CD)
+
+on:
+  pull_request:
+    types: [labeled] # Se activa únicamente cuando añadimos una etiqueta al Pull Request
+
+jobs:
+  despliegue-simulado:
+    # Este trabajo solo arrancará si la etiqueta agregada es exactamente 'deploy'
+    if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Iniciar sesion en el Servidor (Simulado)
+        run: |
+          echo "Conectando al servidor remoto de forma segura..."
+          echo "Usando llave secreta: ${{ secrets.SUPER_SECRET_DEPLOY_KEY }}" # Leemos tu secreto de forma segura
+
+      - name: 3. Desplegar la aplicacion
+        run: |
+          echo "Subiendo archivos index.js y package.json a produccion..."
+          echo "¡El despliegue en el servidor remoto se completo con exito! 🚀"

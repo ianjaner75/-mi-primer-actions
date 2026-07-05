@@ -1,0 +1,20 @@
+name: Despliegue Seguro a Produccion
+
+on:
+  workflow_dispatch # Activación manual con botón para poder probarlo
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+    environment: produccion # <--- [VISTO EN CLASE] Vincula el trabajo con las reglas de tu entorno
+
+    steps:
+      - name: 1. Crear reporte de despliegue
+        run: echo "Despliegue realizado de forma segura el dia de hoy" > despliegue.txt
+
+      - name: 2. Subir reporte con retencion corta (1 dia)
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-produccion
+          path: despliegue.txt
+          retention-days: 1 # <--- [VISTO EN CLASE] Caduca en 24 horas para ahorrar espacio de almacenamiento

@@ -1,1 +1,1 @@
-console.log("¡El código se ha ejecutado con éxito en la máquina virtual!");
+console.log("¡El código se ha ejecutado con éxito en la máquina virtual! ");

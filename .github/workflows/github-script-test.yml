@@ -1,0 +1,34 @@
+name: Robot de Bienvenida con JS
+
+on:
+  issues:
+    types: [opened] # Se enciende únicamente cuando alguien abre un nuevo Issue
+
+permissions:
+  issues: write # Le da permiso explícito al robot para escribir comentarios
+  contents: read # Le da permiso para leer el archivo bienvenida.md
+
+jobs:
+  comentar-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Descargar el repositorio
+        uses: actions/checkout@v4 # Obligatorio para poder leer la plantilla md
+
+      - name: 2. Responder usando JavaScript y Node.js
+        uses: actions/github-script@v7 # Usamos la versión estable más moderna de la acción
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Llave temporal automática de acceso
+          script: |
+            const fs = require('fs') // Importamos el módulo File System de Node.js
+            
+            // Leemos el archivo físico de bienvenida desde el disco duro de la máquina virtual
+            const contenidoPlantilla = fs.readFileSync(".github/ISSUE_RESPONSES/bienvenida.md", "utf8")
+            
+            // Llama a la API oficial de GitHub para crear un comentario en el Issue actual
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: contenidoPlantilla
+            })
